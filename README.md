@@ -1,64 +1,16 @@
-# Reports API
+# React + Vite
 
-A small FastAPI service that exposes a paginated `/reports` endpoint backed by a deterministic in-memory dataset.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Layout
+Currently, two official plugins are available:
 
-```
-app/
-├── __init__.py
-├── data.py        # Seed dataset (120 rows, deterministic)
-├── models.py      # Pydantic models — internal vs public
-├── reports.py     # Filter / sort / pagination query layer
-└── main.py        # FastAPI HTTP layer
-```
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## Requirements
+## React Compiler
 
-- Python 3.10+
-- pip
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Setup
+## Expanding the ESLint configuration
 
-```bash
-git clone https://github.com/IITMBSMLOps/SpecDrivenDevelopmentBase.git
-cd SpecDrivenDevelopmentBase
-
-python3 -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
-
-pip install -e .
-```
-
-## Run the API
-
-```bash
-uvicorn app.main:app --reload --port 8000
-```
-
-Then hit it from another terminal:
-
-```bash
-curl "http://localhost:8000/health"
-curl "http://localhost:8000/reports?limit=3" | python -m json.tool
-```
-
-## Endpoints
-
-| Method | Path       | Description                                            |
-| ------ | ---------- | ------------------------------------------------------ |
-| GET    | `/health`  | Liveness probe — returns `{"status": "ok"}`.           |
-| GET    | `/reports` | Paginated list of reports with filtering and sorting.  |
-
-### `GET /reports` query parameters
-
-| Param        | Type            | Default      | Notes                                            |
-| ------------ | --------------- | ------------ | ------------------------------------------------ |
-| `status`     | enum            | —            | One of `pending`, `approved`, `rejected`, `archived`. |
-| `date_from`  | datetime (ISO)  | —            | Lower bound on `created_at` (inclusive).         |
-| `date_to`    | datetime (ISO)  | —            | Upper bound on `created_at` (inclusive).         |
-| `sort`       | string          | `created_at` | One of `id`, `title`, `status`, `owner`, `amount`, `created_at`. |
-| `descending` | bool            | `true`       | Sort direction.                                  |
-| `offset`     | int (>=0)       | `0`          | Pagination offset.                               |
-| `limit`      | int (1..200)    | `20`         | Page size.                                       |
-
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.

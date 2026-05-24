@@ -1,24 +1,24 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.egg-info/
-.eggs/
-build/
-dist/
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Virtual envs
-.venv/
-venv/
-env/
+node_modules
+dist
+dist-ssr
+*.local
 
-# Editor / OS
-.vscode/
-.idea/
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
 .DS_Store
-
-# Pytest / mypy / coverage
-.pytest_cache/
-.mypy_cache/
-.coverage
-htmlcov/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
