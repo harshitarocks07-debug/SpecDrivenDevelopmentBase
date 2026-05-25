@@ -153,6 +153,13 @@ h1 {
 
 .completed {
   opacity: 0.7;
+}
+
+.completed h2 {
+  text-decoration: line-through;
+}
+
+.completed p {
   text-decoration: line-through;
 }
 
