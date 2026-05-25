@@ -39,27 +39,39 @@ function App() {
       <h1>TaskFlow 🚀</h1>
 
       <div className="task-input">
-        <input
-          type="text"
-          placeholder="Enter a task"
-          value={task}
-          onChange={(e) => setTask(e.target.value)}
-        />
+        <div className="input-group">
+          <label>Task</label>
+          <input
+            type="text"
+            placeholder="Enter a task"
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
+          />
+        </div>
 
-        <select value={priority} onChange={(e) => setPriority(e.target.value)}>
-          <option>High</option>
-          <option>Medium</option>
-          <option>Low</option>
-        </select>
+        <div className="input-group">
+          <label>Priority</label>
+          <select value={priority} onChange={(e) => setPriority(e.target.value)}>
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+          </select>
+        </div>
 
-        <input
-           type="date"
-           value={date}
-           onChange={(e) => setDate(e.target.value)}
-           onFocus={(e) => e.target.showPicker && e.target.showPicker()}
-        />
+        <div className="input-group">
+          <label>Due Date</label>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            style={{ colorScheme: "light" }}
+          />
+        </div>
 
-        <button onClick={addTask}>Add Task</button>
+        <div className="input-group">
+          <label></label>
+          <button onClick={addTask}>Add Task</button>
+        </div>
       </div>
 
       <div className="task-list">
