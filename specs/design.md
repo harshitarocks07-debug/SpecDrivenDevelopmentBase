@@ -1,50 +1,48 @@
 # TaskFlow - Design Document
 
-## UI Layout
+## Overview
 
-The application contains:
+TaskFlow is a modern and user-friendly To-Do application designed to help users manage daily tasks efficiently. The application focuses on simplicity, productivity, and clean UI design.
 
-### Header
-- App title
+The project is built using:
+- React
+- Vite
+- JavaScript
+- CSS
+
+---
+
+# Design Goals
+
+The primary goals of the application are:
+
+- Simple task management
+- Clean and modern user interface
+- Easy navigation and interaction
+- Responsive layout
+- Attractive visual design
+
+---
+
+# UI Design
+
+## Theme
+The application uses a soft pink modern theme with:
+- gradient background
+- rounded UI elements
+- smooth spacing
+- clean typography
+- modern task cards
+
+---
+
+# Layout Structure
+
+## Header Section
+Contains:
+- Application title
 - Branding
 
-### Task Input Section
-- Task input field
-- Priority dropdown
-- Due date selector
-- Add Task button
-
-### Task Dashboard
-Each task card contains:
-- Task title
-- Priority level
-- Due date
-- Complete button
-- Delete button
-
-## Design Theme
-- Dark modern UI
-- Gradient background
-- Rounded cards
-- Responsive layout
-
-## Color Scheme
-- Dark blue background
-- White text
-- Red for High priority
-- Orange for Medium priority
-- Green for Low priority
-
-## Components
-
-### App.jsx
-Main application component managing:
-- state
-- task operations
-- rendering UI
-
-## Future Improvements
-- Local storage support
-- Drag and drop tasks
-- Task filtering
-- Authentication system
+Example:
+```txt
+TaskFlow 🚀
