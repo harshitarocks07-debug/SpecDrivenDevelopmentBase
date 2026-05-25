@@ -41,9 +41,9 @@ function App() {
   }
 
   const getPriorityColor = (priority) => {
-    if (priority === "High") return "#ff4d4d"
-    if (priority === "Medium") return "#ffaa00"
-    return "#00cc66"
+    if (priority === "High") return "#ff4d6d"
+    if (priority === "Medium") return "#ff9f1c"
+    return "#2ec4b6"
   }
 
   return (
@@ -51,17 +51,18 @@ function App() {
       style={{
         minHeight: "100vh",
         background:
-          "linear-gradient(to right, #141e30, #243b55)",
+          "linear-gradient(to right, #ff9ecf, #ffe0f0)",
         padding: "40px",
         fontFamily: "Arial",
-        color: "white",
       }}
     >
       <h1
         style={{
           textAlign: "center",
-          fontSize: "50px",
-          marginBottom: "30px",
+          fontSize: "55px",
+          marginBottom: "35px",
+          color: "#ffffff",
+          textShadow: "2px 2px 10px rgba(0,0,0,0.2)",
         }}
       >
         TaskFlow 🚀
@@ -71,9 +72,9 @@ function App() {
         style={{
           display: "flex",
           justifyContent: "center",
-          gap: "10px",
+          gap: "12px",
           flexWrap: "wrap",
-          marginBottom: "30px",
+          marginBottom: "35px",
         }}
       >
         <input
@@ -82,10 +83,14 @@ function App() {
           value={task}
           onChange={(e) => setTask(e.target.value)}
           style={{
-            padding: "12px",
-            width: "250px",
-            borderRadius: "10px",
+            padding: "14px",
+            width: "260px",
+            borderRadius: "14px",
             border: "none",
+            outline: "none",
+            background: "#fff0f6",
+            color: "#333",
+            fontSize: "15px",
           }}
         />
 
@@ -95,9 +100,13 @@ function App() {
             setPriority(e.target.value)
           }
           style={{
-            padding: "12px",
-            borderRadius: "10px",
+            padding: "14px",
+            borderRadius: "14px",
             border: "none",
+            outline: "none",
+            background: "#fff0f6",
+            color: "#333",
+            fontSize: "15px",
           }}
         >
           <option>High</option>
@@ -112,22 +121,29 @@ function App() {
             setDueDate(e.target.value)
           }
           style={{
-            padding: "12px",
-            borderRadius: "10px",
+            padding: "14px",
+            borderRadius: "14px",
             border: "none",
+            outline: "none",
+            background: "#fff0f6",
+            color: "#333",
+            fontSize: "15px",
           }}
         />
 
         <button
           onClick={addTask}
           style={{
-            padding: "12px 20px",
-            borderRadius: "10px",
+            padding: "14px 22px",
+            borderRadius: "14px",
             border: "none",
-            backgroundColor: "#00bfff",
+            backgroundColor: "#ff4d8d",
             color: "white",
             cursor: "pointer",
             fontWeight: "bold",
+            fontSize: "15px",
+            boxShadow:
+              "0 4px 10px rgba(0,0,0,0.2)",
           }}
         >
           Add Task
@@ -136,7 +152,7 @@ function App() {
 
       <div
         style={{
-          maxWidth: "700px",
+          maxWidth: "750px",
           margin: "auto",
         }}
       >
@@ -144,12 +160,13 @@ function App() {
           <div
             key={index}
             style={{
-              background: "#ffffff15",
-              padding: "20px",
-              borderRadius: "15px",
-              marginBottom: "20px",
+              background: "#ffffffcc",
+              padding: "25px",
+              borderRadius: "20px",
+              marginBottom: "25px",
               boxShadow:
-                "0 4px 10px rgba(0,0,0,0.3)",
+                "0 6px 15px rgba(0,0,0,0.15)",
+              textAlign: "center",
             }}
           >
             <h2
@@ -157,12 +174,19 @@ function App() {
                 textDecoration: item.completed
                   ? "line-through"
                   : "none",
+                color: "#333",
+                marginBottom: "10px",
               }}
             >
               {item.text}
             </h2>
 
-            <p>
+            <p
+              style={{
+                color: "#333",
+                fontSize: "18px",
+              }}
+            >
               Priority:
               <span
                 style={{
@@ -170,14 +194,19 @@ function App() {
                     item.priority
                   ),
                   fontWeight: "bold",
-                  marginLeft: "5px",
+                  marginLeft: "6px",
                 }}
               >
                 {item.priority}
               </span>
             </p>
 
-            <p>
+            <p
+              style={{
+                color: "#333",
+                marginBottom: "15px",
+              }}
+            >
               Due Date:{" "}
               {item.dueDate || "Not set"}
             </p>
@@ -188,12 +217,13 @@ function App() {
               }
               style={{
                 marginRight: "10px",
-                padding: "8px 14px",
-                borderRadius: "8px",
+                padding: "10px 16px",
+                borderRadius: "10px",
                 border: "none",
-                backgroundColor: "#00cc66",
+                backgroundColor: "#2ec4b6",
                 color: "white",
                 cursor: "pointer",
+                fontWeight: "bold",
               }}
             >
               {item.completed
@@ -204,12 +234,13 @@ function App() {
             <button
               onClick={() => deleteTask(index)}
               style={{
-                padding: "8px 14px",
-                borderRadius: "8px",
+                padding: "10px 16px",
+                borderRadius: "10px",
                 border: "none",
-                backgroundColor: "#ff4d4d",
+                backgroundColor: "#ff4d6d",
                 color: "white",
                 cursor: "pointer",
+                fontWeight: "bold",
               }}
             >
               Delete
