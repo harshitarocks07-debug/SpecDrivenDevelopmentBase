@@ -36,9 +36,7 @@ function App() {
 
   return (
     <div className="app">
-      <h1>
-        TaskFlow 🚀
-      </h1>
+      <h1>TaskFlow 🚀</h1>
 
       <div className="task-input">
         <input
@@ -48,19 +46,17 @@ function App() {
           onChange={(e) => setTask(e.target.value)}
         />
 
-        <select
-          value={priority}
-          onChange={(e) => setPriority(e.target.value)}
-        >
+        <select value={priority} onChange={(e) => setPriority(e.target.value)}>
           <option>High</option>
           <option>Medium</option>
           <option>Low</option>
         </select>
 
         <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
+           type="date"
+           value={date}
+           onChange={(e) => setDate(e.target.value)}
+           onFocus={(e) => e.target.showPicker && e.target.showPicker()}
         />
 
         <button onClick={addTask}>Add Task</button>
@@ -82,9 +78,7 @@ function App() {
               </span>
             </p>
 
-            <p>
-              Due Date: {item.date ? item.date : "Not set"}
-            </p>
+            <p>Due Date: {item.date ? item.date : "Not set"}</p>
 
             <div className="buttons">
               <button
