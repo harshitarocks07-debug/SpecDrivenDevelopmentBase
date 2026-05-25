@@ -163,3 +163,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     width: 90%;
   }
 }
+.date-input {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 20px;
+  background: #f5e8ef;
+  color: #444;
+  font-size: 16px;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.date-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.4);
+  cursor: pointer;
+}
