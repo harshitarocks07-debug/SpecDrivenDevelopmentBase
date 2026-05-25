@@ -96,6 +96,7 @@ http://localhost:5173
 - Authentication system
 
 ---
+Updated deployment for Vercel
 
 # Author
 
