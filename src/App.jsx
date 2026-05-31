@@ -25,6 +25,8 @@ function App() {
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [search, setSearch] = useState("");
   const [notes, setNotes] = useState(() => localStorage.getItem("notes") || "");
+  const [diary, setDiary] = useState(() => localStorage.getItem("diary") || "");
+  const [diaryOpen, setDiaryOpen] = useState(false);
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "Pink");
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem("darkMode") === "true");
   const [sortByDate, setSortByDate] = useState(false);
@@ -46,6 +48,7 @@ function App() {
   useEffect(() => { localStorage.setItem("tasks", JSON.stringify(tasks)); }, [tasks]);
   useEffect(() => { localStorage.setItem("categories", JSON.stringify(categories)); }, [categories]);
   useEffect(() => { localStorage.setItem("notes", notes); }, [notes]);
+  useEffect(() => { localStorage.setItem("diary", diary); }, [diary]);
 
   useEffect(() => {
     localStorage.setItem("theme", theme);
@@ -258,17 +261,7 @@ function App() {
 
         <hr className="sidebar-divider" />
 
-<h2 className="sidebar-title">📝 Notes</h2>
-<textarea
-  className="notes-area"
-  placeholder="Write notes, timetable..."
-  value={notes}
-  onChange={(e) => setNotes(e.target.value)}
-/>
-
-<hr className="sidebar-divider" />
-
-<h2 className="sidebar-title">🎨 Theme</h2>
+        <h2 className="sidebar-title">📝 Notes</h2>
         <textarea
           className="notes-area"
           placeholder="Write notes, timetable..."
@@ -296,6 +289,10 @@ function App() {
       <div className="app">
         <button className="dark-mode-btn" onClick={() => setDarkMode(!darkMode)} title="Toggle Dark Mode">
           {darkMode ? "☀️" : "🌙"}
+        </button>
+
+        <button className="diary-btn" onClick={() => setDiaryOpen(true)} title="My Diary">
+          📔
         </button>
 
         <h1>TaskFlow 🚀</h1>
@@ -379,6 +376,24 @@ function App() {
               ))}
             </div>
           </>
+        )}
+
+        {diaryOpen && (
+          <div className="modal-overlay" onClick={() => setDiaryOpen(false)}>
+            <div className="modal" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h2>📔 My Diary</h2>
+                <button className="modal-close" onClick={() => setDiaryOpen(false)}>✕</button>
+              </div>
+              <p className="modal-date">{new Date().toDateString()}</p>
+              <textarea
+                className="diary-area"
+                placeholder="Write your thoughts for today..."
+                value={diary}
+                onChange={(e) => setDiary(e.target.value)}
+              />
+            </div>
+          </div>
         )}
 
       </div>
