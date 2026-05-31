@@ -14,11 +14,15 @@ const themes = {
   Rose:    { bg: "linear-gradient(135deg, #fb7185, #ffe4e6)", accent: "#e11d48" },
 };
 
+const DEFAULT_CATEGORIES = ["Work", "Personal", "Study", "Shopping"];
+
 function App() {
   const [task, setTask] = useState("");
   const [priority, setPriority] = useState("Medium");
   const [date, setDate] = useState("");
+  const [category, setCategory] = useState("Personal");
   const [filter, setFilter] = useState("All");
+  const [categoryFilter, setCategoryFilter] = useState("All");
   const [search, setSearch] = useState("");
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "Pink");
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem("darkMode") === "true");
@@ -27,14 +31,19 @@ function App() {
   const [editText, setEditText] = useState("");
   const [editPriority, setEditPriority] = useState("");
   const [editDate, setEditDate] = useState("");
+  const [editCategory, setEditCategory] = useState("");
+  const [newCategory, setNewCategory] = useState("");
+  const [categories, setCategories] = useState(() => {
+    const saved = localStorage.getItem("categories");
+    return saved ? JSON.parse(saved) : DEFAULT_CATEGORIES;
+  });
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem("tasks");
     return saved ? JSON.parse(saved) : [];
   });
 
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
+  useEffect(() => { localStorage.setItem("tasks", JSON.stringify(tasks)); }, [tasks]);
+  useEffect(() => { localStorage.setItem("categories", JSON.stringify(categories)); }, [categories]);
 
   useEffect(() => {
     localStorage.setItem("theme", theme);
@@ -43,11 +52,9 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem("darkMode", darkMode);
-    if (darkMode) {
-      document.body.style.background = "linear-gradient(135deg, #1a1a2e, #16213e)";
-    } else {
-      document.body.style.background = themes[theme].bg;
-    }
+    document.body.style.background = darkMode
+      ? "linear-gradient(135deg, #1a1a2e, #16213e)"
+      : themes[theme].bg;
   }, [darkMode]);
 
   const accent = themes[theme].accent;
@@ -59,50 +66,59 @@ function App() {
     return new Date(dateStr) < today;
   };
 
+  const completedTasks = tasks.filter((t) => t.completed).length;
+  const progress = tasks.length === 0 ? 0 : Math.round((completedTasks / tasks.length) * 100);
+
   const addTask = () => {
     if (task.trim() === "") return;
-    const newTask = { text: task, priority, date, completed: false };
-    setTasks([...tasks, newTask]);
+    setTasks([...tasks, { text: task, priority, date, category, completed: false }]);
     setTask("");
     setPriority("Medium");
     setDate("");
+    setCategory("Personal");
   };
 
-  const deleteTask = (index) => {
-    setTasks(tasks.filter((_, i) => i !== index));
-  };
+  const deleteTask = (index) => setTasks(tasks.filter((_, i) => i !== index));
 
   const completeTask = (index) => {
-    const updatedTasks = [...tasks];
-    updatedTasks[index].completed = !updatedTasks[index].completed;
-    setTasks(updatedTasks);
+    const updated = [...tasks];
+    updated[index].completed = !updated[index].completed;
+    setTasks(updated);
   };
 
-  const clearCompleted = () => {
-    setTasks(tasks.filter((t) => !t.completed));
-  };
+  const clearCompleted = () => setTasks(tasks.filter((t) => !t.completed));
 
   const startEdit = (index) => {
     setEditIndex(index);
     setEditText(tasks[index].text);
     setEditPriority(tasks[index].priority);
     setEditDate(tasks[index].date);
+    setEditCategory(tasks[index].category || "Personal");
   };
 
   const saveEdit = () => {
-    const updatedTasks = [...tasks];
-    updatedTasks[editIndex] = {
-      ...updatedTasks[editIndex],
+    const updated = [...tasks];
+    updated[editIndex] = {
+      ...updated[editIndex],
       text: editText,
       priority: editPriority,
       date: editDate,
+      category: editCategory,
     };
-    setTasks(updatedTasks);
+    setTasks(updated);
     setEditIndex(null);
   };
 
-  const cancelEdit = () => {
-    setEditIndex(null);
+  const addCategory = () => {
+    const trimmed = newCategory.trim();
+    if (!trimmed || categories.includes(trimmed)) return;
+    setCategories([...categories, trimmed]);
+    setNewCategory("");
+  };
+
+  const deleteCategory = (cat) => {
+    setCategories(categories.filter((c) => c !== cat));
+    if (categoryFilter === cat) setCategoryFilter("All");
   };
 
   const counts = {
@@ -125,6 +141,7 @@ function App() {
     tasks
       .filter((t) => !t.completed)
       .filter((t) => filter === "All" || t.priority === filter)
+      .filter((t) => categoryFilter === "All" || t.category === categoryFilter)
       .filter((t) => t.text.toLowerCase().includes(search.toLowerCase()))
   );
 
@@ -136,65 +153,46 @@ function App() {
     <div className={`task-card ${item.completed ? "completed" : ""} ${isOverdue(item.date) && !item.completed ? "overdue" : ""}`}>
       {editIndex === index ? (
         <div className="edit-form">
-          <input
-            type="text"
-            value={editText}
-            onChange={(e) => setEditText(e.target.value)}
-            className="edit-input"
-          />
-          <select
-            value={editPriority}
-            onChange={(e) => setEditPriority(e.target.value)}
-            className="edit-select"
-          >
+          <input type="text" value={editText} onChange={(e) => setEditText(e.target.value)} className="edit-input" />
+          <select value={editPriority} onChange={(e) => setEditPriority(e.target.value)} className="edit-select">
             <option>High</option>
             <option>Medium</option>
             <option>Low</option>
           </select>
-          <input
-            type="date"
-            value={editDate}
-            onChange={(e) => setEditDate(e.target.value)}
-            className="edit-input"
-            style={{ colorScheme: darkMode ? "dark" : "light" }}
-          />
+          <select value={editCategory} onChange={(e) => setEditCategory(e.target.value)} className="edit-select">
+            {categories.map((c) => <option key={c}>{c}</option>)}
+          </select>
+          <input type="date" value={editDate} onChange={(e) => setEditDate(e.target.value)} className="edit-input" style={{ colorScheme: darkMode ? "dark" : "light" }} />
           <div className="buttons">
-            <button
-              className="save-btn"
-              onClick={saveEdit}
-              style={{ background: accent }}
-            >
-              Save
-            </button>
-            <button className="cancel-btn" onClick={cancelEdit}>Cancel</button>
+            <button className="save-btn" onClick={saveEdit} style={{ background: accent }}>💾 Save</button>
+            <button className="cancel-btn" onClick={() => setEditIndex(null)}>✕ Cancel</button>
           </div>
         </div>
       ) : (
         <>
           <div className="card-header">
             <h2>{item.text}</h2>
-            {isOverdue(item.date) && !item.completed && (
-              <span className="overdue-badge">⚠️ Overdue</span>
-            )}
+            <div className="card-badges">
+              {item.category && (
+                <span className="category-badge" style={{ background: accent + "33", color: accent }}>
+                  {item.category}
+                </span>
+              )}
+              {isOverdue(item.date) && !item.completed && (
+                <span className="overdue-badge">⚠️ Overdue</span>
+              )}
+            </div>
           </div>
           <p>Priority: <span className={item.priority.toLowerCase()}>{item.priority}</span></p>
           <p>Due Date: {item.date ? item.date : "Not set"}</p>
           <div className="buttons">
             <button className="complete-btn" onClick={() => completeTask(index)}>
-              {item.completed ? "Undo" : "Complete"}
+              {item.completed ? "↩️" : "✅"}
             </button>
             {!item.completed && (
-              <button
-                className="edit-btn"
-                onClick={() => startEdit(index)}
-                style={{ background: accent }}
-              >
-                Edit
-              </button>
+              <button className="edit-btn" onClick={() => startEdit(index)} style={{ background: accent }}>✏️</button>
             )}
-            <button className="delete-btn" onClick={() => deleteTask(index)}>
-              Delete
-            </button>
+            <button className="delete-btn" onClick={() => deleteTask(index)}>🗑️</button>
           </div>
         </>
       )}
@@ -204,6 +202,7 @@ function App() {
   return (
     <div className={`layout ${darkMode ? "dark" : ""}`}>
       <div className="sidebar">
+
         <h2 className="sidebar-title">🗂 Filter</h2>
         {["All", "High", "Medium", "Low"].map((f) => (
           <button
@@ -219,6 +218,44 @@ function App() {
 
         <hr className="sidebar-divider" />
 
+        <h2 className="sidebar-title">🏷️ Categories</h2>
+        <button
+          className={`filter-btn ${categoryFilter === "All" ? "active-filter" : ""}`}
+          style={categoryFilter === "All" ? { background: accent, boxShadow: `0 5px 15px ${accent}88` } : {}}
+          onClick={() => setCategoryFilter("All")}
+        >
+          <span>All</span>
+          <span className="count-badge">{tasks.filter((t) => !t.completed).length}</span>
+        </button>
+        {categories.map((cat) => (
+          <div key={cat} className="category-row">
+            <button
+              className={`filter-btn ${categoryFilter === cat ? "active-filter" : ""}`}
+              style={categoryFilter === cat ? { background: accent, boxShadow: `0 5px 15px ${accent}88` } : {}}
+              onClick={() => setCategoryFilter(cat)}
+            >
+              <span>{cat}</span>
+              <span className="count-badge">{tasks.filter((t) => t.category === cat && !t.completed).length}</span>
+            </button>
+            {!DEFAULT_CATEGORIES.includes(cat) && (
+              <button className="delete-cat-btn" onClick={() => deleteCategory(cat)}>✕</button>
+            )}
+          </div>
+        ))}
+        <div className="add-category">
+          <input
+            type="text"
+            placeholder="New category..."
+            value={newCategory}
+            onChange={(e) => setNewCategory(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && addCategory()}
+            className="cat-input"
+          />
+          <button className="add-cat-btn" onClick={addCategory} style={{ background: accent }}>+</button>
+        </div>
+
+        <hr className="sidebar-divider" />
+
         <h2 className="sidebar-title">🎨 Theme</h2>
         <div className="theme-grid">
           {Object.entries(themes).map(([name, val]) => (
@@ -231,30 +268,31 @@ function App() {
             />
           ))}
         </div>
+
       </div>
 
       <div className="app">
-        <button
-          className="dark-mode-btn"
-          onClick={() => setDarkMode(!darkMode)}
-          title="Toggle Dark Mode"
-        >
+        <button className="dark-mode-btn" onClick={() => setDarkMode(!darkMode)} title="Toggle Dark Mode">
           {darkMode ? "☀️" : "🌙"}
         </button>
 
         <h1>TaskFlow 🚀</h1>
 
+        <div className="progress-container">
+          <div className="progress-label">
+            <span>{completedTasks} of {tasks.length} tasks completed</span>
+            <span>{progress}%</span>
+          </div>
+          <div className="progress-bar-bg">
+            <div className="progress-bar-fill" style={{ width: `${progress}%`, background: accent }} />
+          </div>
+        </div>
+
         <div className="task-input">
           <div className="input-group">
             <label>Task</label>
-            <input
-              type="text"
-              placeholder="Enter a task"
-              value={task}
-              onChange={(e) => setTask(e.target.value)}
-            />
+            <input type="text" placeholder="Enter a task" value={task} onChange={(e) => setTask(e.target.value)} />
           </div>
-
           <div className="input-group">
             <label>Priority</label>
             <select value={priority} onChange={(e) => setPriority(e.target.value)}>
@@ -263,36 +301,25 @@ function App() {
               <option>Low</option>
             </select>
           </div>
-
+          <div className="input-group">
+            <label>Category</label>
+            <select value={category} onChange={(e) => setCategory(e.target.value)}>
+              {categories.map((c) => <option key={c}>{c}</option>)}
+            </select>
+          </div>
           <div className="input-group">
             <label>Due Date</label>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              style={{ colorScheme: darkMode ? "dark" : "light" }}
-            />
+            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} style={{ colorScheme: darkMode ? "dark" : "light" }} />
           </div>
-
           <div className="input-group">
             <label></label>
-            <button
-              onClick={addTask}
-              style={{ background: accent, boxShadow: `0 5px 15px ${accent}88` }}
-            >
-              Add Task
-            </button>
+            <button onClick={addTask} style={{ background: accent, boxShadow: `0 5px 15px ${accent}88` }}>Add Task</button>
           </div>
         </div>
 
         <div className="toolbar">
           <div className="search-bar">
-            <input
-              type="text"
-              placeholder="🔍 Search tasks..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+            <input type="text" placeholder="🔍 Search tasks..." value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
           <button
             className={`sort-btn ${sortByDate ? "sort-active" : ""}`}
@@ -322,12 +349,7 @@ function App() {
           <>
             <div className="completed-header">
               <h2 className="section-title completed-title">✅ Completed ({filteredCompleted.length})</h2>
-              <button
-                className="clear-btn"
-                onClick={clearCompleted}
-              >
-                🗑 Clear All
-              </button>
+              <button className="clear-btn" onClick={clearCompleted}>🗑 Clear All</button>
             </div>
             <div className="task-list">
               {filteredCompleted.map((item) => (
@@ -336,6 +358,7 @@ function App() {
             </div>
           </>
         )}
+
       </div>
     </div>
   );

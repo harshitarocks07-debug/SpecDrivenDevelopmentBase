@@ -37,6 +37,7 @@ body {
 .dark .progress-bar-bg { background: rgba(255,255,255,0.1); }
 .dark .cat-input { background: rgba(255,255,255,0.1); color: #eee; }
 .dark .task-card.overdue { background: rgba(255,100,100,0.1); }
+.dark .notes-area { background: rgba(255,255,255,0.08); color: #ddd; }
 
 /* SIDEBAR */
 .sidebar {
@@ -151,6 +152,23 @@ body {
 }
 
 .add-cat-btn:hover { transform: scale(1.1); }
+
+.notes-area {
+  width: 100%;
+  min-height: 120px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.4);
+  font-size: 13px;
+  color: #555;
+  outline: none;
+  resize: vertical;
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+}
+
+.notes-area::placeholder { color: #aaa; }
 
 .theme-grid {
   display: grid;
@@ -567,15 +585,13 @@ input[type="date"]::-webkit-calendar-picker-indicator { opacity: 1; filter: inve
   .filter-btn { flex: 1; min-width: 70px; justify-content: center; gap: 6px; }
   .category-row { width: 100%; }
   .add-category { width: 100%; }
+  .notes-area { width: 100%; }
   .theme-grid { width: 100%; }
   .sidebar-divider { width: 100%; }
 
   h1 { font-size: 48px; }
-
   .progress-container { width: 90%; }
-
   .task-input { flex-direction: column; align-items: center; gap: 12px; }
-
   .input-group { width: 90%; max-width: 340px; }
 
   .task-input input,
@@ -587,6 +603,5 @@ input[type="date"]::-webkit-calendar-picker-indicator { opacity: 1; filter: inve
   .search-bar input { width: 100%; }
   .toolbar { flex-direction: column; align-items: center; }
   .sort-btn { width: 90%; max-width: 340px; }
-
   .dark-mode-btn { top: 15px; right: 15px; width: 40px; height: 40px; font-size: 18px; }
 }
