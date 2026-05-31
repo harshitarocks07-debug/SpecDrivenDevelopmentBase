@@ -54,10 +54,10 @@ npm run dev
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
-
+![TaskFlow Screenshot](TaskFlow.png)
 
 ---
 
-## 👩‍💻 Made by Harshita Singh
+## Made by Harshita Singh
