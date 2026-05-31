@@ -41,14 +41,7 @@ A modern, feature-rich task management app built with React and deployed on Verc
 ## Getting Started
 
 ```bash
-# Clone the repo
-git clone https://github.com/yourusername/TaskFlow.git
-
-# Install dependencies
-cd TaskFlow
 npm install
-
-# Run locally
 npm run dev
 ```
 
@@ -56,7 +49,7 @@ npm run dev
 
 ## Screenshots
 
-![TaskFlow Screenshot](TaskFlow.png)
+![TaskFlow Preview](./TaskFlow.png)
 
 ---
 
